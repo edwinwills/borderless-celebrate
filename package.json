@@ -1,0 +1,36 @@
+{
+  "name": "borderless-celebrate",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Office TV newspaper that celebrates every release that goes live.",
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c yellow,cyan \"tsx watch server/index.ts\" \"vite\"",
+    "build": "vite build",
+    "start": "NODE_ENV=production tsx server/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.134.0",
+    "canvas-confetti": "^1.9.4",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}

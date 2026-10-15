@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1200" height="760" fill="#f6f7fb"/>
+  <rect width="1200" height="64" fill="#10243e"/>
+  <text x="32" y="41" fill="#fff" font-size="22" font-weight="700">Borderless</text>
+  <text x="900" y="41" fill="#b8c4d6" font-size="16">Acme Care Ltd</text>
+  <rect x="0" y="64" width="220" height="696" fill="#fff"/>
+  <g fill="#5b6b80" font-size="17"><text x="32" y="120">Dashboard</text><text x="32" y="164" fill="#10243e" font-weight="700">Candidates</text><text x="32" y="208">Sponsor licence</text><text x="32" y="252">Reports</text></g>
+  <rect x="260" y="100" width="900" height="120" rx="12" fill="#fff" stroke="#e1e5ee"/>
+  <circle cx="320" cy="160" r="34" fill="#c9d6ea"/>
+  <text x="372" y="150" font-size="26" font-weight="700" fill="#10243e">Ama Mensah</text>
+  <text x="372" y="182" font-size="17" fill="#5b6b80">Senior Care Worker, SOC 6135, starts 3 Nov</text>
+  <rect x="930" y="138" width="200" height="48" rx="8" fill="#2b5fd9"/>
+  <text x="1030" y="169" font-size="18" fill="#fff" text-anchor="middle" font-weight="700">Request CoS</text>
+  <rect x="260" y="250" width="900" height="470" rx="12" fill="#fff" stroke="#e1e5ee"/>
+  <text x="296" y="300" font-size="24" font-weight="700" fill="#10243e">Request a Certificate of Sponsorship</text>
+  <text x="296" y="332" font-size="16" fill="#5b6b80">We've filled in what we already know. Check it and send.</text>
+  <g font-size="15" fill="#5b6b80">
+    <text x="296" y="384">Job title</text><text x="736" y="384">Salary</text>
+    <text x="296" y="476">Work location</text><text x="736" y="476">Hours per week</text>
+  </g>
+  <g fill="#f3f5fa" stroke="#d5dbe7"><rect x="296" y="396" width="400" height="48" rx="8"/><rect x="736" y="396" width="390" height="48" rx="8"/><rect x="296" y="488" width="400" height="48" rx="8"/><rect x="736" y="488" width="390" height="48" rx="8"/></g>
+  <g font-size="18" fill="#10243e"><text x="312" y="427">Senior Care Worker</text><text x="752" y="427">£25,600 a year</text><text x="312" y="519">Leeds, LS1 4AP</text><text x="752" y="519">37.5</text></g>
+  <g fill="#1f9d55" font-size="15"><text x="296" y="580">✓ Pre-filled from the candidate profile</text><text x="296" y="606">✓ Meets the going rate for SOC 6135</text></g>
+  <rect x="926" y="640" width="200" height="52" rx="8" fill="#2b5fd9"/>
+  <text x="1026" y="673" font-size="18" fill="#fff" text-anchor="middle" font-weight="700">Send request</text>
+</svg>

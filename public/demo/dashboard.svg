@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1200" height="760" fill="#f6f7fb"/>
+  <rect width="1200" height="64" fill="#10243e"/>
+  <text x="32" y="41" fill="#fff" font-size="22" font-weight="700">Borderless</text>
+  <text x="40" y="124" font-size="30" font-weight="700" fill="#10243e">Sponsor dashboard</text>
+  <g>
+    <rect x="40" y="152" width="360" height="140" rx="12" fill="#fff" stroke="#e1e5ee"/>
+    <text x="68" y="200" font-size="16" fill="#5b6b80">Sponsored workers</text><text x="68" y="262" font-size="54" font-weight="700" fill="#10243e">48</text>
+    <rect x="420" y="152" width="360" height="140" rx="12" fill="#fff" stroke="#e1e5ee"/>
+    <text x="448" y="200" font-size="16" fill="#5b6b80">CoS available</text><text x="448" y="262" font-size="54" font-weight="700" fill="#10243e">12</text>
+    <rect x="800" y="152" width="360" height="140" rx="12" fill="#fff4d6" stroke="#f2c94c"/>
+    <text x="828" y="200" font-size="16" fill="#8a6100">Visas expiring in 90 days</text><text x="828" y="262" font-size="54" font-weight="700" fill="#8a6100">5</text>
+  </g>
+  <rect x="40" y="320" width="1120" height="400" rx="12" fill="#fff" stroke="#e1e5ee"/>
+  <text x="68" y="368" font-size="22" font-weight="700" fill="#10243e">Upcoming deadlines</text>
+  <g font-size="18" fill="#10243e">
+    <text x="68" y="430">Ama Mensah</text><text x="420" y="430" fill="#5b6b80">Visa expires</text><text x="1040" y="430" fill="#c0392b" font-weight="700">12 days</text>
+    <text x="68" y="490">Rahul Iyer</text><text x="420" y="490" fill="#5b6b80">Right to Work recheck</text><text x="1040" y="490" fill="#8a6100" font-weight="700">31 days</text>
+    <text x="68" y="550">Joy Okeke</text><text x="420" y="550" fill="#5b6b80">Visa expires</text><text x="1040" y="550" fill="#8a6100" font-weight="700">58 days</text>
+    <text x="68" y="610">Daniel Cruz</text><text x="420" y="610" fill="#5b6b80">Share code verified</text><text x="1040" y="610" fill="#1f9d55" font-weight="700">Done</text>
+  </g>
+  <g stroke="#eef1f6"><line x1="68" y1="456" x2="1132" y2="456"/><line x1="68" y1="516" x2="1132" y2="516"/><line x1="68" y1="576" x2="1132" y2="576"/></g>
+</svg>
