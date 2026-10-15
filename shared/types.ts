@@ -7,6 +7,8 @@ export interface Media {
 export interface Person {
   name: string;
   avatarUrl?: string;
+  /** GitHub login, so a username and a real name for the same person merge. */
+  login?: string;
 }
 
 /** One ticket (or commit) that went out in a release. */

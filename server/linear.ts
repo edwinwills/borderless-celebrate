@@ -123,7 +123,7 @@ export function issueToStory(issue: LinearIssue): Story {
     team: issue.team.name,
     project: issue.project?.name,
     assignee: issue.assignee
-      ? { name: issue.assignee.displayName || issue.assignee.name, avatarUrl: issue.assignee.avatarUrl ?? undefined }
+      ? { name: issue.assignee.name || issue.assignee.displayName, avatarUrl: issue.assignee.avatarUrl ?? undefined }
       : undefined,
     media: extractMedia(issue).map((m) => ({ ...m, url: publicMediaUrl(m.url) })),
   };

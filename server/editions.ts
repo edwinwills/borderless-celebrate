@@ -38,14 +38,43 @@ export function tidySubject(message: string): string {
     .trim();
 }
 
+const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/** True when every part of a real name appears in the login: "Chisom Nwike" ↔ "nwikechisom". */
+function nameMatchesLogin(name: string, login: string) {
+  const parts = name.toLowerCase().split(/[^a-z0-9]+/).filter((p) => p.length > 1);
+  const l = squash(login);
+  return parts.length > 0 && parts.every((p) => l.includes(p));
+}
+
+const BOT = /\[bot\]$|^github-actions|^dependabot|^renovate/i;
+
+/**
+ * One entry per human. The same person can arrive as a GitHub login (whoever
+ * pressed deploy), a git author name and a Linear assignee; keep the real name
+ * and whichever avatar we found.
+ */
 function uniquePeople(people: Person[]): Person[] {
-  const seen = new Map<string, Person>();
+  const merged: Person[] = [];
   for (const p of people) {
-    const key = p.name.toLowerCase();
-    if (!p.name || /\[bot\]$|^github-actions|^dependabot/i.test(p.name)) continue;
-    if (!seen.has(key) || (!seen.get(key)!.avatarUrl && p.avatarUrl)) seen.set(key, p);
+    if (!p.name || BOT.test(p.name) || (p.login && BOT.test(p.login))) continue;
+    const match = merged.find(
+      (m) =>
+        (p.login && m.login === p.login) ||
+        squash(m.name) === squash(p.name) ||
+        // "Edwin Wills" (git) and "edwinwills" (GitHub) are the same person
+        (m.login && !p.login && nameMatchesLogin(p.name, m.login)) ||
+        (p.login && !m.login && nameMatchesLogin(m.name, p.login)),
+    );
+    if (!match) {
+      merged.push({ ...p });
+      continue;
+    }
+    if (match.name === match.login && p.name !== p.login) match.name = p.name;
+    match.login ??= p.login;
+    match.avatarUrl ??= p.avatarUrl;
   }
-  return [...seen.values()].slice(0, 10);
+  return merged.slice(0, 10);
 }
 
 /**

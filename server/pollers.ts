@@ -39,7 +39,11 @@ async function gh<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-const person = (u?: GhUser | null): Person[] => (u ? [{ name: u.login, avatarUrl: u.avatar_url }] : []);
+const person = (u?: GhUser | null, realName?: string): Person[] =>
+  u ? [{ name: realName || u.login, login: u.login, avatarUrl: u.avatar_url }] : realName ? [{ name: realName }] : [];
+
+/** Commit authors by their git name (e.g. "Priya Shah"), with their GitHub avatar when linked. */
+const commitAuthors = (commits: GhCommit[]) => commits.flatMap((c) => person(c.author, c.commit.author?.name));
 
 /** Commits between two SHAs (or just the head commit when there's no base). */
 async function commitsBetween(repo: string, base: string | undefined, head: string): Promise<GhCommit[]> {
@@ -67,6 +71,7 @@ interface Shipment {
   notes?: string;
   /** The deployed commit's message, used if we can't read the commit range. */
   headMessage?: string;
+  headAuthor?: string;
   /** Still running: check again next poll. */
   pending?: boolean;
   /** Finished but not a success: skip for good. */
@@ -87,7 +92,7 @@ async function listShipments(source: GithubSource): Promise<Shipment[]> {
         conclusion: string | null;
         actor: GhUser;
         triggering_actor?: GhUser;
-        head_commit?: { message: string } | null;
+        head_commit?: { message: string; author?: { name: string } | null } | null;
       }[];
     }>(`/repos/${repo}/actions/workflows/${encodeURIComponent(source.workflow)}/runs?status=success&per_page=10`);
     return data.workflow_runs.map((r) => ({
@@ -99,6 +104,7 @@ async function listShipments(source: GithubSource): Promise<Shipment[]> {
       version: r.head_sha.slice(0, 7),
       by: person(r.triggering_actor ?? r.actor),
       headMessage: r.head_commit?.message,
+      headAuthor: r.head_commit?.author?.name,
     }));
   }
 
@@ -198,12 +204,14 @@ async function pollGithubSource(source: GithubSource) {
       try {
         const commits = await commitsBetween(source.repo, base, ship.sha);
         messages = commits.map((c) => c.commit.message);
-        by = [...by, ...commits.flatMap((c) => person(c.author))];
+        // Whoever wrote the code first, then whoever pressed deploy.
+        by = [...commitAuthors(commits), ...by];
       } catch (err) {
         // Without commit access we can still print the deployed commit's message.
         if (!ship.headMessage) throw err;
         warnings.add((err as Error).message);
         messages = [ship.headMessage];
+        if (ship.headAuthor) by = [{ name: ship.headAuthor }, ...by];
       }
     }
 

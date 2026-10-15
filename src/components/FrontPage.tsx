@@ -1,18 +1,24 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Edition, Media, PaperConfig, Person } from "../../shared/types.ts";
 
-/** Shrink text until it fits its box. Headlines vary from 2 words to 12. */
-function useFitText<T extends HTMLElement>(text: string, max: number, min: number) {
-  const ref = useRef<T>(null);
+/**
+ * Shrink the headline until it fits its box AND the article underneath fits too.
+ * Headlines vary from 2 words to 12, and the story shouldn't be squeezed off the page.
+ */
+function useFitHeadline(text: string, max: number, min: number) {
+  const headline = useRef<HTMLHeadingElement>(null);
+  const body = useRef<HTMLElement>(null);
   const fit = () => {
-    const el = ref.current;
+    const el = headline.current;
     if (!el) return;
     let size = max;
     el.style.fontSize = `${size}px`;
     // Tight line-height lets glyphs overhang the box slightly, so allow a little slack;
     // a genuinely overflowing extra line is a whole line-height over.
-    const overflows = () => el.scrollHeight > el.clientHeight + size * 0.3 || el.scrollWidth > el.clientWidth + 1;
-    while (size > min && overflows()) {
+    const headlineOverflows = () => el.scrollHeight > el.clientHeight + size * 0.3 || el.scrollWidth > el.clientWidth + 1;
+    const bodyOverflows = () =>
+      [...(body.current?.children ?? [])].some((c) => c.scrollHeight > c.clientHeight + 2);
+    while (size > min && (headlineOverflows() || bodyOverflows())) {
       size -= 4;
       el.style.fontSize = `${size}px`;
     }
@@ -21,7 +27,7 @@ function useFitText<T extends HTMLElement>(text: string, max: number, min: numbe
   useEffect(() => {
     document.fonts?.ready.then(fit);
   }, [text]);
-  return ref;
+  return { headline, body };
 }
 
 function MediaReel({ media }: { media: Media[] }) {
@@ -68,12 +74,14 @@ function initials(name: string) {
 
 function Byline({ people }: { people: Person[] }) {
   if (!people.length) return null;
-  const names = people.map((p) => p.name);
-  const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0];
+  const named = people.slice(0, 4).map((p) => p.name);
+  const others = people.length - named.length;
+  const parts = others > 0 ? [...named, `${others} other${others === 1 ? "" : "s"}`] : named;
+  const list = parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}` : parts[0];
   return (
     <div className="byline">
       <div className="byline-faces">
-        {people.slice(0, 6).map((p) =>
+        {people.slice(0, 5).map((p) =>
           p.avatarUrl ? (
             <img key={p.name} src={p.avatarUrl} alt="" />
           ) : (
@@ -82,7 +90,7 @@ function Byline({ people }: { people: Person[] }) {
         )}
       </div>
       <p>
-        Shipped by <strong>{list}</strong>
+        By <strong>{list}</strong>
       </p>
     </div>
   );
@@ -103,7 +111,7 @@ export function FrontPage({
 }) {
   const media = edition.stories.flatMap((s) => s.media).slice(0, 8);
   const hasMedia = media.length > 0;
-  const headlineRef = useFitText<HTMLHeadingElement>(edition.headline.headline, hasMedia ? 132 : 210, 60);
+  const fit = useFitHeadline(edition.headline.headline, hasMedia ? 132 : 190, 56);
   const shown = edition.stories.slice(0, hasMedia ? 4 : 6);
   const hidden = edition.stories.length - shown.length + edition.otherChanges.length;
 
@@ -134,16 +142,18 @@ export function FrontPage({
 
       <section className="lead">
         <p className="kicker">{edition.headline.kicker}</p>
-        <h2 className="headline" ref={headlineRef}>
+        <h2 className="headline" ref={fit.headline}>
           {edition.headline.headline}
         </h2>
         <p className="subhead">{edition.headline.subhead}</p>
+        <Byline people={edition.shippedBy} />
       </section>
 
-      <section className="body">
+      <section className="body" ref={fit.body}>
         {hasMedia && <MediaReel media={media} />}
+        {!hasMedia && <p className="blurb">{edition.headline.blurb}</p>}
         <div className="columns">
-          <p className="blurb">{edition.headline.blurb}</p>
+          {hasMedia && <p className="blurb">{edition.headline.blurb}</p>}
           {shown.length > 0 && (
             <div className="contents">
               <h3>In this edition</h3>
@@ -162,7 +172,6 @@ export function FrontPage({
               )}
             </div>
           )}
-          <Byline people={edition.shippedBy} />
         </div>
       </section>
       <p className="source">{edition.sourceLabel}</p>
