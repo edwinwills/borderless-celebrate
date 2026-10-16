@@ -48,6 +48,7 @@ Set `COMPANY_CONTEXT` so the puns land.
 | Key | Does |
 | --- | --- |
 | T | Print a test edition (with celebration) |
+| R | Replay the latest release's celebration, on this screen only (for demos) |
 | F | Fullscreen |
 | S | Fanfare on/off (browsers block sound until the page has had a key press or click) |
 | ← | Go back through past releases, newest first |

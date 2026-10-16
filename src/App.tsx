@@ -134,6 +134,10 @@ export default function App() {
       if (key === "t") {
         unlockAudio();
         fetch("/api/test", { method: "POST" });
+      } else if (key === "r") {
+        // Replay the latest release as if it had just shipped, on this screen only
+        unlockAudio();
+        if (editions[0]) setShowing({ kind: "celebrate", edition: editions[0], started: Date.now() });
       } else if (key === "f") {
         if (document.fullscreenElement) document.exitFullscreen();
         else document.documentElement.requestFullscreen().catch(() => {});
