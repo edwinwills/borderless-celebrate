@@ -1,0 +1,37 @@
+# Render Blueprint: New → Blueprint → pick this repo.
+# Free instances sleep after 15 minutes without requests; the TV page checks
+# /api/status every 30s, so it stays awake whenever the TV is on.
+# Free instances have no disk: saved editions reset when it restarts, and the
+# first poll rebuilds the last BACKFILL_DAYS of releases (without celebrating).
+services:
+  - type: web
+    name: borderless-bugle
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    healthCheckPath: /healthz
+    envVars:
+      - key: PAPER_NAME
+        value: The Borderless Bugle
+      - key: PAPER_MOTTO
+        value: All the code that's fit to ship
+      - key: COMPANY_CONTEXT
+        value: Borderless is a UK platform that helps employers sponsor and hire overseas workers (sponsor licences, CoS, Skilled Worker visas).
+      - key: GITHUB_SOURCES
+        value: getborderless/borderless:actions:deploy-prod.yml,getborderless/borderless:actions:deploy-preprod-to-prod.yml
+      - key: LINEAR_TEAM_KEYS
+        value: BDLS,OPE
+      - key: BASIC_AUTH_USER
+        value: bugle
+      - key: DATA_DIR
+        value: /tmp/bugle
+      # Secrets: Render asks for these when you create the Blueprint. They live only in Render.
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: LINEAR_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: BASIC_AUTH_PASSWORD
+        sync: false

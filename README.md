@@ -64,7 +64,17 @@ The ticker at the bottom shows recent changes and when the server last checked f
 
 ## Hosting it
 
-It needs a host that keeps one Node process running and gives it a persistent disk, so not Vercel or Netlify. [Railway](https://railway.com) is the least effort:
+It needs a host that keeps one Node process running, so not Vercel or Netlify.
+
+### Render (free)
+
+`render.yaml` sets it up on Render's free plan. In Render: **New → Blueprint**, pick this repo, and paste in `GITHUB_TOKEN`, `LINEAR_API_KEY`, `ANTHROPIC_API_KEY` and a long random `BASIC_AUTH_PASSWORD` when asked.
+
+The free plan sleeps after 15 minutes without requests. The TV page checks in every 30 seconds, so it's awake whenever the TV is on; when it's off, nothing is watched. There's no disk on the free plan either, so editions reset on each restart and the first poll rebuilds the last `BACKFILL_DAYS` of releases. For an always-on paper with lasting history, use Render's Starter plan with a disk at `/data`, or Railway.
+
+### Railway
+
+Railway keeps it running with a persistent disk for about $5 a month:
 
 1. Push this folder to a private GitHub repo. `.env` and `data/` are gitignored, and `.dockerignore` keeps them out of the image.
 2. In Railway: **New project → Deploy from GitHub repo**. It finds the `Dockerfile`.
