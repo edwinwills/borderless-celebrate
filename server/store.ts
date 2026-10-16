@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { config } from "./config.ts";
+import { uniquePeople } from "./people.ts";
 import type { Edition } from "../shared/types.ts";
 
 const FILE = path.resolve(config.dataDir, "state.json");
@@ -50,5 +51,7 @@ export const store = {
       .slice(0, MAX_EDITIONS);
     save();
   },
-  editions: (limit = 30) => state.editions.slice(0, limit),
+  // Re-merge on the way out so editions saved before a people fix read correctly too.
+  editions: (limit = 30) =>
+    state.editions.slice(0, limit).map((e) => ({ ...e, shippedBy: uniquePeople(e.shippedBy) })),
 };

@@ -548,11 +548,13 @@ body,
 /* ── Motion ───────────────────────────────────────── */
 
 .spin-in {
-  animation: spin-in 1800ms cubic-bezier(0.12, 0.6, 0.3, 1) both;
+  animation: spin-in 1800ms linear both;
+  will-change: transform;
 }
 
 .spin-out {
   animation: spin-out 900ms cubic-bezier(0.5, 0, 0.9, 0.4) both;
+  will-change: transform, opacity;
 }
 
 .slide-in {
@@ -560,22 +562,22 @@ body,
 }
 
 /* The old newsreel spinner: a speck in the middle of the screen that whirls
-   towards the camera, blurred while it's moving fast, and slaps down flat. */
+   towards the camera and slaps down flat. The whirl is one unbroken ease-out
+   curve (a mid-spin keyframe would restart the easing and make it stutter);
+   only the landing wobble is split into steps. No blur: filtering a full page
+   every frame drops frames on TV hardware. */
 @keyframes spin-in {
   from {
     transform: rotate(-1800deg) scale(0.01);
-    filter: blur(8px);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.3, 1);
   }
-  55% {
-    transform: rotate(-200deg) scale(0.6);
-    filter: blur(3px);
+  80% {
+    transform: rotate(4deg) scale(1.04);
+    animation-timing-function: ease-in-out;
   }
-  82% {
-    transform: rotate(5deg) scale(1.05);
-    filter: blur(0);
-  }
-  92% {
+  91% {
     transform: rotate(-1.5deg) scale(0.99);
+    animation-timing-function: ease-in-out;
   }
   to {
     transform: rotate(-0.5deg) scale(1);
@@ -589,7 +591,6 @@ body,
   }
   to {
     transform: rotate(900deg) scale(0.01);
-    filter: blur(6px);
     opacity: 0;
   }
 }
